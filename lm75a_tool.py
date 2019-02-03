@@ -23,7 +23,7 @@ def parse_args(in_args):
     '-b', '--bus',
     help='LM75A bus number',
     dest='bus',
-    default=1)
+    default='1')
 
     parser.add_argument(
     '-O', '--os',
@@ -42,11 +42,11 @@ def parse_args(in_args):
 
 class LM75A_tool():
     def __init__(self, args: str):
-        self._addr = args.addr
+        self._addr = int(args.addr)
         self._bus = args.bus
         self._os = args.os
         self._hyst = args.hyst
-        self.i2c_bus = smbus.SMBus(self._bus)
+        self.i2c_bus = smbus.SMBus(int(self._bus))
 
     def show_config(self):
         raw = self.i2c_bus.read_word_data(self._addr, 3) & 0xFFF
@@ -81,4 +81,5 @@ if __name__ == "__main__":
     print("Current config")
     tool.show_config()
     print("The temperature is:")
+
     tool.show_temp()
